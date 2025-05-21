@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaX Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for panel display logic, overriding Tailwind's display utilities if needed */
+        .panel {
+            display: none;
+        }
+        .panel.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-start min-h-screen p-5">
+    <div class="w-full max-w-2xl text-center mb-8">
+        <h1 class="text-4xl font-extrabold text-gray-800">Esport Area App</h1>
+    </div>
+
+    <div id="app-container" class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl text-center relative overflow-hidden">
+        <div id="login-panel" class="panel active">
+            <h2 class="text-2xl font-bold text-gray-700 mb-6">Login</h2>
+            <div class="mb-4">
+                <label for="login-username" class="block text-left text-gray-600 text-sm font-semibold mb-2">Username:</label>
+                <input type="text" id="login-username" placeholder="Enter your username" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-6">
+                <label for="login-password" class="block text-left text-gray-600 text-sm font-semibold mb-2">Password:</label>
+                <input type="password" id="login-password" placeholder="Enter your password" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button id="login-button" class="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 w-full mb-4">Login</button>
+            <p class="text-gray-600">အကောင့်မရှိသေးဘူးလား? <a href="#" id="show-signup" class="text-blue-600 hover:underline font-semibold">အကောင့်ဖွင့်မည်</a></p>
+        </div>
+
+        <div id="signup-panel" class="panel">
+            <h2 class="text-2xl font-bold text-gray-700 mb-6">အကောင့်ဖွင့်မည်</h2>
+            <div class="mb-4">
+                <label for="signup-username" class="block text-left text-gray-600 text-sm font-semibold mb-2">Username:</label>
+                <input type="text" id="signup-username" placeholder="Choose a username" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-6">
+                <label for="signup-password" class="block text-left text-gray-600 text-sm font-semibold mb-2">Password:</label>
+                <input type="password" id="signup-password" placeholder="Choose a password" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button id="signup-button" class="bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 transition duration-300 w-full mb-4">အကောင့်ဖွင့်မည်</button>
+            <p class="text-gray-600">အကောင့်ရှိပြီးသားလား? <a href="#" id="show-login" class="text-blue-600 hover:underline font-semibold">Login ဝင်မည်</a></p>
+        </div>
+
+        <div id="dashboard-panel" class="panel">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-700">Dashboard</h2>
+                <span id="welcome-message" class="text-lg text-gray-600 font-medium">Welcome, User!</span>
+                <button id="logout-button" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300">Logout</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm text-left">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Team ဖွဲ့စည်းခြင်း</h3>
+                    <div class="mb-4">
+                        <label for="team-name" class="block text-gray-600 text-sm font-semibold mb-2">Team Name:</label>
+                        <input type="text" id="team-name" placeholder="Enter team name" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </div>
+                    <div class="mb-4">
+                        <label for="team-contact" class="block text-gray-600 text-sm font-semibold mb-2">Contact Info:</label>
+                        <input type="text" id="team-contact" placeholder="Phone or Email" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </div>
+                    <button id="create-team-button" class="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 w-full">Team ဖွဲ့မည်</button>
+                    <p id="team-status-message" class="mt-3 text-sm font-medium text-center"></p>
+
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 mt-6 pb-2 border-b border-gray-200">ရှိသမျှ Team များ</h3>
+                    <button id="refresh-teams-button" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 w-full mb-4">Teams များကို ကြည့်မည်</button>
+                    <div id="team-list" class="bg-white border border-gray-200 rounded-md p-4 min-h-[120px] max-h-60 overflow-y-auto text-sm text-gray-700">
+                        <p class="text-center text-gray-500">Team များ မရှိသေးပါ။</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm text-left">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Appointment စီမံခန့်ခွဲခြင်း</h3>
+                    <div class="mb-4">
+                        <label for="opponent-team-name" class="block text-gray-600 text-sm font-semibold mb-2">ပြိုင်ဘက် Team:</label>
+                        <input type="text" id="opponent-team-name" placeholder="Enter opponent team name" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </div>
+                    <div class="mb-4">
+                        <label for="appointment-datetime" class="block text-gray-600 text-sm font-semibold mb-2">ရက်စွဲနှင့် အချိန် (YYYY-MM-DD HH:MM):</label>
+                        <input type="datetime-local" id="appointment-datetime" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </div>
+                    <button id="request-appointment-button" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 w-full">Appointment တောင်းဆိုမည်</button>
+                    <p id="appointment-status-message" class="mt-3 text-sm font-medium text-center"></p>
+
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 mt-6 pb-2 border-b border-gray-200">ကျွန်ုပ်၏ Appointment များ</h3>
+                    <button id="refresh-appointments-button" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 w-full mb-4">Appointments များကို ကြည့်မည်</button>
+                    <div id="my-appointments-list" class="bg-white border border-gray-200 rounded-md p-4 min-h-[120px] max-h-60 overflow-y-auto text-sm text-gray-700">
+                        <p class="text-center text-gray-500">Appointment များ မရှိသေးပါ။</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm text-left md:col-span-2">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Team Member စီမံခန့်ခွဲခြင်း</h3>
+                    <div class="mb-4 flex gap-4">
+                        <div class="flex-grow">
+                            <label for="member-username" class="block text-gray-600 text-sm font-semibold mb-2">Member Username:</label>
+                            <input type="text" id="member-username" placeholder="Enter username to add/remove" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400">
+                        </div>
+                        <div class="flex items-end">
+                            <button id="add-member-button" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 mr-2">Add Member</button>
+                            <button id="remove-member-button" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300">Remove Member</button>
+                        </div>
+                    </div>
+                    <p id="member-status-message" class="mt-3 text-sm font-medium text-center"></p>
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2 mt-4">ကျွန်ုပ်၏ Team Members:</h4>
+                    <div id="my-team-members-list" class="bg-white border border-gray-200 rounded-md p-4 min-h-[80px] max-h-40 overflow-y-auto text-sm text-gray-700">
+                        <p class="text-center text-gray-500">Team Members များ မရှိသေးပါ။</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
